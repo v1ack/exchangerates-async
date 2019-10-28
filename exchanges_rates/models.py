@@ -24,6 +24,7 @@ class Rates:
         """
         self.last_set = datetime.now().isoformat()
         self.rates = rates['rates']
+        self.is_set = True
 
     def get_all(self) -> dict:
         """

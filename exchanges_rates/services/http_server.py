@@ -23,11 +23,13 @@ class APIService(AIOHTTPService):
         """
 
         logger.info('Request for all currencies')
-        return web.json_response(
-            dict(
-                rates=self.rates.get_all(),
-                last_update=self.rates.last_set
-            ))
+        if self.rates.is_set:
+            return web.json_response(
+                dict(
+                    rates=self.rates.get_all(),
+                    last_update=self.rates.last_set
+                ))
+        raise web.HTTPServiceUnavailable()
 
     async def one_rate(self, request: web.Request) -> web.Response:
         """
@@ -39,17 +41,18 @@ class APIService(AIOHTTPService):
         currency = request.match_info['currency']
         logger.info('Request for %s', currency)
         rate = self.rates.get(currency)
+        if self.rates.is_set:
+            if rate is not None:
+                return web.json_response(
+                    dict(
+                        name=currency.upper(),
+                        rate=rate,
+                        last_update=self.rates.last_set
+                    ))
 
-        if rate is not None:
-            return web.json_response(
-                dict(
-                    name=currency.upper(),
-                    rate=rate,
-                    last_update=self.rates.last_set
-                ))
-
-        logger.warning('Currency %s not found', currency)
-        return web.HTTPNotFound()
+            logger.warning('Currency %s not found', currency)
+            raise web.HTTPNotFound()
+        raise web.HTTPServiceUnavailable()
 
     async def create_application(self) -> web.Application:
         """
