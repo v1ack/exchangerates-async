@@ -32,3 +32,25 @@ Provides async http server with auto update
 from exchanges_rates import run_services
 run_services(address='localhost', port=8080, exchange_update_interval=60)
 ```
+
+#### docker-compose
+
+```yaml
+version: '2.4'
+
+services:
+  app:
+    image: v1ack/exchangerates_async:latest
+    ports:
+      - 8080:8080
+    environment:
+      APP_ADDRESS: 0.0.0.0
+      APP_PORT: 8080
+      EXCHANGES_UPDATE_INTERVAL: 60
+```
+
+#### docker-compose with local build
+
+`run_app.sh`
+
+`run_tests.sh`

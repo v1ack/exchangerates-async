@@ -1,0 +1,20 @@
+version: '2.4'
+
+services:
+
+  tests:
+    build:
+      dockerfile: Dockerfile.test
+      context: .
+      target: tests
+
+    command: bash -c 'pytest tests'
+
+    volumes:
+      - .:/mnt
+    working_dir: /mnt/
+
+    environment:
+      APP_ADDRESS: localhost
+      APP_PORT: 8080
+      EXCHANGES_UPDATE_INTERVAL: 60
