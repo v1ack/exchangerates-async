@@ -1,4 +1,4 @@
-# Exchanges rates asyns
+# Exchanges rates async
 Provides async http server with auto update
 
 ### REST API
@@ -52,5 +52,20 @@ services:
 #### docker-compose with local build
 
 `run_app.sh`
+
+#### pip
+
+Installing
+`pip install dist/exchanges_rates_async-0.1-py3-none-any.whl`
+
+### Tests
+
+#### Pytest
+
+`pytest conftest.py`
+
+(doesn't work on Windows)
+
+#### Docker
 
 `run_tests.sh`

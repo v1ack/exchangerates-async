@@ -69,7 +69,11 @@ async def test_api_empty(rates, rest_port):
 @pytest.mark.skipif(os.name == 'nt', reason='You use windows')
 async def test_rates_updater(rates):
     rates.set(dict(rates={'RATES': 50}))
-    ExchangesRatesUpdater.fetch = Mock(return_value=json.dumps(dict(rates={'RATES': 42})))
+
+    async def url_emulator():
+        return json.dumps(dict(rates={'RATES': 42}))
+
+    ExchangesRatesUpdater.fetch = Mock(return_value=url_emulator())
     loop = asyncio.get_event_loop()
     task = ExchangesRatesUpdater(interval=60, rates=rates)
     task.set_loop(loop)
